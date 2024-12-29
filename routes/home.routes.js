@@ -7,9 +7,17 @@ const fileModel = require('../models/file.models.js');
 const supabase = require('../config/supabase.js')
 
 
-router.get('/',isAuthenticated, (req, res) => {
-    res.render('index');    
-});
+router.get('/',isAuthenticated,async (req,res)=>{
+  
+    const userFile = await fileModel.find({
+      user : req.user.userId
+    })
+    console.log(userFile)
+    res.render('index',{
+      files : userFile
+    })
+  
+  })
 
 router.post('/uploads',isAuthenticated,upload.single('file'),async (req,res)=>{
     // res.json(req.file)

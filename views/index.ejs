@@ -51,6 +51,41 @@
       </div>
     </div>
 
+    <!-- Files Container -->
+    <div class="file-container grid gap-4 mt-6">
+      <% if (files.length> 0) { %>
+        <% files.forEach((file)=> { %>
+          <div class="bg-gray-100 p-4 rounded flex justify-between items-center relative">
+            <h1 class="text-black" title="<%= file.originalname %>">
+              <%= file.originalname.split('.').slice(0, -1).join('.') %>
+            </h1>
+            <h5 class="text-black absolute top-10 text-sm font-light text-gray-700">
+              <%= file.originalname.split('.').pop() %>
+            </h5>
+            <div>
+              <a href="/delete/<%= file.customPath %>" class="text-red-500">Delete</a>
+              <a href="/download/<%= file.customPath %>" class="text-blue-500 text-2xl" aria-label="Download File"
+                target="_blank">
+                <i class="ri-download-line"></i>
+              </a>
+            </div>
+          </div>
+          <% }) %>
+            <% } else { %>
+              <p class="text-gray-400 text-center">No files uploaded yet.</p>
+              <% } %>
+    </div>
+
+<!-- 
+    <% if (file.originalname.split('.').pop() === 'jpg'||'png') { %>
+      <%= 'image' %>
+    <% } else if (file.originalname.split('.').pop() === 'pdf') { %>
+      <%= 'PDF' %>
+    <% } else if (file.originalname.split('.').pop() === 'zip') { %>
+      <%= 'ZIP' %>
+    <% } else { %>
+      <%= 'File Type not found' %>
+    <% } %> -->
 
   </main>
 
