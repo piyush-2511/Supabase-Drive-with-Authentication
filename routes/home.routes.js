@@ -32,7 +32,7 @@ router.post('/uploads',isAuthenticated,upload.single('file'),async (req,res)=>{
       
       // Upload the file to Supabase Storage
       const {data, error} = await supabase.storage
-        .from('uploads')// this is the name of the bucket
+        .from(process.env.BUCKET_NAME)// this is the name of the bucket
         .upload(customPath, file.buffer,{// in this file buffer is the file data
           contentType : file.mimetype, // mimetype is the type of file
           upsert : false // set it true if you want ot overwrite the file with same name 
