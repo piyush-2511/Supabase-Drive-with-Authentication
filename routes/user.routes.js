@@ -117,10 +117,10 @@ router.post('/login',
     res.cookie('token', token)
 
     // res.json(token)
-    // res.redirect('/')
-    res.status(200).json({
-      message : 'User logged in successfully'
-    })
+    res.redirect('/')
+    // res.status(200).json({
+    //   message : 'User logged in successfully'
+    // })
 })
 
 
