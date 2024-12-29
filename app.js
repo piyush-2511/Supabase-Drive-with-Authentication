@@ -1,24 +1,33 @@
-const express = require('express')
-const cookieParser = require('cookie-parser')
-const app = express()
-const path = require('path')
-const dotenv = require('dotenv')
-dotenv.config();
-const connectToDb = require('./config/db.js')
-connectToDb();
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const dotenv = require('dotenv');
+const {connectToDb} = require('./config/db.js');
 
+dotenv.config(); // Load environment variables
 
+const app = express();
 
-app.use(cookieParser()) //this should be at top 
-app.set('view engine','ejs')
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(express.static(path.join(__dirname,'public')))
+// Connect to the database
+//connectToDb();
 
+// Middleware
+app.use(cookieParser()); // Parse cookies
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
+// Set view engine
+app.set('view engine', 'ejs');
 
-app.listen(3000,()=>{
-  console.log('Server is listening at localhost:3000')
-})
+// Routes (You need to import and use your user routes here)
+const userRoutes = require('./routes/user.routes.js');
+app.use('/user', userRoutes); // Use the user routes under '/user'
 
-
+// Start the server
+(async () => {
+  await connectToDb(); // Ensure connection is established
+  app.listen(3000, () => {
+    console.log('Server is listening at http://localhost:3000');
+  });
+})();
