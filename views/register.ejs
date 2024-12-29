@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Vibration effect for input boxes */
+    .vibrate {
+      animation: vibrate 0.2s ease-in-out 0s 2;
+      border-color: red !important;
+    }
+
+    @keyframes vibrate {
+      0% {
+        transform: translateX(-3px);
+      }
+
+      25% {
+        transform: translateX(3px);
+      }
+
+      50% {
+        transform: translateX(-3px);
+      }
+
+      75% {
+        transform: translateX(3px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    /* Error Label Style */
+    .error-label {
+      color: red;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+  </style>
+</head>
+
+<body class="bg-gray-800">
+
+  <div class="container">
+    <form class="max-w-sm mx-auto" id="registerForm" action="/user/register" method="post">
+
+      <!-- Username Field -->
+      <div class="mb-5">
+        <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Username</label>
+        <span id="usernameError" class="error-label hidden">Username must be at least 3 characters</span>
+        <input type="text" id="username" name="username"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="piyush" required />
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-5">
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Email</label>
+        <span id="emailError" class="error-label hidden">Enter a valid email</span>
+        <input type="email" id="email" name="email"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="name@flowbite.com" required />
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-5">
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Password</label>
+        <span id="passwordError" class="error-label hidden">Password must be at least 6 characters</span>
+        <input type="password" id="password" name="password"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="*********" required />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="submitBtn"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block">
+        Submit
+      </button>
+      <span class="text-white mb-5">Registered?</span>
+      <a href="./login" class="text-blue-600 text-glow">Login here</a>
+
+    </form>
+  </div>
+
+  <!-- Flowbite Script -->
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
+  <!-- Custom JavaScript -->
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Get form fields
+      const username = document.getElementById('username');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+
+      // Get error labels
+      const usernameError = document.getElementById('usernameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+
+      let isValid = true;
+
+      // Reset Errors
+      [usernameError, emailError, passwordError].forEach(el => el.classList.add('hidden'));
+      [username, email, password].forEach(el => el.classList.remove('vibrate'));
+
+      // Validate Username
+      if (username.value.trim().length < 3) {
+        usernameError.classList.remove('hidden');
+        username.classList.add('vibrate');
+        isValid = false;
+      }
+
+      // Validate Email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim())) {
+        emailError.classList.remove('hidden');
+        email.classList.add('vibrate');
+        isValid = false;
+      }
+
+      // Validate Password
+      if (password.value.trim().length < 6) {
+        passwordError.classList.remove('hidden');
+        password.classList.add('vibrate');
+        isValid = false;
+      }
+
+      // Submit if valid
+      if (isValid) {
+        e.target.submit(); // Submit form
+      }
+    });
+  </script>
+</body>
+
+</html>
