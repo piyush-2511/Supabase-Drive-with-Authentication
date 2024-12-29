@@ -68,34 +68,65 @@ router.post('/uploads',isAuthenticated,upload.single('file'),async (req,res)=>{
     
   })
 
-  router.get('/download/:customPath',isAuthenticated,async (req,res)=>{
+router.get('/download/:customPath',isAuthenticated,async (req,res)=>{
     const loggedInUser = req.user.userId;
     const customPath = req.params.customPath;
-   
+
     const file = await fileModel.findOne({
-      user : loggedInUser,
-      customPath : customPath
+        user : loggedInUser,
+        customPath : customPath
     });
-  
+
     if(!file){
-      return res.status(401).json({
+        return res.status(401).json({
         message : 'Unauthorized'
-      })
+        })
     }
-  
+
     // Generate a signed URL for the file
     const { data: signedUrlData, error } = await supabase.storage
     .from('uploads') // Replace with your bucket name
     .createSignedUrl(customPath, 60); // Generate a signed URL valid for 60 seconds
-  
+
     if (error) {
-      console.error('Error creating signed URL:', error.message);
-      return res.status(500).json({ message: 'Failed to create signed URL' });
+        console.error('Error creating signed URL:', error.message);
+        return res.status(500).json({ message: 'Failed to create signed URL' });
     }
-  
+
     // Redirect the user to the signed URL
     res.redirect(signedUrlData.signedUrl); 
-  })
+    })
 
+
+router.get('/delete/:customPath',isAuthenticated,async (req,res)=>{
+    const loggedInUser = req.user.userId;
+    const customPath = req.params.customPath;
+  
+    const file = await fileModel.findOne({
+      user : loggedInUser,
+      customPath : customPath
+    });
+    if (!file){
+      return res.status(401).json({
+        message : 'File Not Found'
+      })
+    }
+    // Delete the file from Supabase Storage
+    const { data, error } = await supabase.storage
+      .from('uploads') // Replace with your bucket name
+      .remove([customPath]); // Pass the file name to delete
+  
+    if (error) {
+      console.error('Error deleting file:', error.message);
+      return res.status(500).json({ message: 'Failed to delete file' });
+    }
+  
+    // Delete the file record from the database
+    await fileModel.deleteOne({
+      user : loggedInUser,
+      customPath : customPath
+    });
+    res.redirect('/')
+  })
 
 module.exports = router;

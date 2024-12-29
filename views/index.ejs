@@ -63,7 +63,7 @@
               <%= file.originalname.split('.').pop() %>
             </h5>
             <div>
-              <a href="/delete/<%= file.customPath %>" class="text-red-500">Delete</a>
+              <a href="/delete/<%= file.customPath %>" class="text-red-500 text-2xl m-2"><i class="ri-close-line" aria-label="Close"></i></a>
               <a href="/download/<%= file.customPath %>" class="text-blue-500 text-2xl" aria-label="Download File"
                 target="_blank">
                 <i class="ri-download-line"></i>
@@ -76,20 +76,24 @@
               <% } %>
     </div>
 
+
+
   </main>
 
   <!-- Flowbite -->
   <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 
   <script>
-    // Show Pop-Up
+    // Show Pop-Up and hide file container
     document.querySelector('.showPopUp').addEventListener('click', () => {
       document.querySelector('.pop').classList.remove('hidden');
+      document.querySelector('.file-container').classList.add('hidden');
     });
 
-    // Hide Pop-Up
+    // Hide Pop-Up and show file container
     document.querySelector('.hidePopUp').addEventListener('click', () => {
       document.querySelector('.pop').classList.add('hidden');
+      document.querySelector('.file-container').classList.remove('hidden');
     });
   </script>
 
